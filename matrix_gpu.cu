@@ -5,12 +5,14 @@
 
 
 const int blocksize = 16; 
-const int N = 1024;
+const int N = 256;
 const int gridsize = N / blocksize;
 
 __global__
 void add_matrix(float *a, float *b, float *c, int N)
 {
+    // coalesced
+    /*
 	int index_x = blockIdx.x * blockDim.x + threadIdx.x;
 	int index_y = blockIdx.y * blockDim.y + threadIdx.y;
 	
@@ -19,6 +21,19 @@ void add_matrix(float *a, float *b, float *c, int N)
 	int index = index_y * grid_width + index_x;
 	
 	c[index] = a[index] + b[index];
+	*/
+	
+	// Non Coalesced
+	
+	int index_y = blockIdx.x * blockDim.x + threadIdx.x;
+	int index_x = blockIdx.y * blockDim.y + threadIdx.y;
+	
+	int grid_width = gridDim.x * blockDim.x;
+	
+	int index = index_y * grid_width + index_x;
+	
+	c[index] = a[index] + b[index];
+	
 }
 
 int main()
@@ -82,15 +97,16 @@ int main()
 	
 	cudaEventElapsedTime(&elapsed, begin, end);
 
-	/*
-	for (int i = 0; i < N; i++)
+	
+	for (int i = N-16; i < N; i++)
 	{
-		for (int j = 0; j < N; j++)
+		for (int j = N-16; j < N; j++)
 		{
 			printf("%0.2f ", c[i+j*N]);
 		}
 		printf("\n");
 	}
-	printf("\n");*/
-	printf("Blocksize = %i\tN = %i Time : %f\n",blocksize,N,elapsed*1000);
+	printf("\n");
+	//printf("Blocksize = %i\tN = %i Time : %f\n",blocksize,N,elapsed*1000);
+	printf("%f\n",elapsed*1000);
 }

@@ -2,9 +2,20 @@
 
 
 
-nvcc matrix_gpu.cu -L /usr/local/cuda/lib -lcudart -o matrix_gpu -N=$1
+nvcc matrix_gpu.cu -L /usr/local/cuda/lib -lcudart -o matrix_gpu
 
-gcc -c matrix_cpu.c -o matrix_cpu.o N=$1
-gcc -c milli.c -o milli.o
+gcc milli.o matrix_cpu.c -o matrix_cpu -std=c99
 
-gcc matrix_cpu.o milli.o -o matrix_cpu
+echo gpu
+for i in `seq 1 10`;
+do	
+	./matrix_gpu
+done
+
+echo
+
+echo cpu
+for i in `seq 1 10`;
+do	
+	./matrix_cpu
+done

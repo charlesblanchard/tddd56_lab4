@@ -24,7 +24,7 @@ int main()
 	const int size = N*sizeof(float);
 	
 	for(int i=0; i<N; i++)
-		c[i]=i;
+		c[i]=i*3.14;
 	
 	cudaMalloc( (void**)&cd, size );
 	dim3 dimBlock( blocksize, 1 );
@@ -39,7 +39,7 @@ int main()
 	
 	printf("\n");
 	for (int i = 0; i < N; i++)
-		printf("Square root of %2i: CPU = %f\tGPU = %f \n",i, c[i], sqrt(i));
+		printf("Square root of %2i: GPU = %f\tCPU = %f \n",i, c[i], sqrt(i*3.14));
 	printf("\n");
 	delete[] c;
 	printf("done\n");

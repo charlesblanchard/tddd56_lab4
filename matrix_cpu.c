@@ -4,14 +4,16 @@
 #include <stdio.h>
 #include "milli.h"
 
-void add_matrix(float *a, float *b, float *c, int N)
+#define N 256
+
+void add_matrix(float *a, float *b, float *c, int M)
 {
 	int index;
 	
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < N; j++)
+	for (int i = 0; i < M; i++)
+		for (int j = 0; j < M; j++)
 		{
-			index = i + j*N;
+			index = i + j*M;
 			c[index] = a[index] + b[index];
 		}
 }
@@ -45,5 +47,5 @@ int main()
 		}
 		printf("\n");
 	}*/
-	printf("\n%i Time : %d\n",N, time);
+	printf("\n%i Time : %i\n",N, time);
 }
